@@ -1,2 +1,2 @@
-# gswf-example
-The example for gwsf usage
+# gsgw
+The golang safe gateway

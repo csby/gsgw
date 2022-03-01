@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/csby/gsgw/config"
 	"github.com/csby/gwsf/glog"
 	"github.com/csby/gwsf/gserver"
 	"github.com/csby/gwsf/gtype"
@@ -13,13 +14,13 @@ import (
 
 const (
 	moduleType    = "server"
-	moduleName    = "gwsf-svc-example"
-	moduleRemark  = "WEB服务示例"
+	moduleName    = "gsgw"
+	moduleRemark  = "安全网关"
 	moduleVersion = "1.0.1.0"
 )
 
 var (
-	cfg              = NewConfig()
+	cfg              = config.NewConfig()
 	log              = &glog.Writer{Level: glog.LevelAll}
 	svr gtype.Server = nil
 )
@@ -35,6 +36,7 @@ func init() {
 	cfg.Module.Remark = moduleRemark
 	cfg.Module.Path = moduleArgs.ModulePath()
 	cfg.Svc.BootTime = now
+	cfg.Node.InstanceId = gtype.NewGuid()
 
 	rootFolder := filepath.Dir(moduleArgs.ModuleFolder())
 	cfgFolder := filepath.Join(rootFolder, "cfg")
@@ -70,6 +72,10 @@ func init() {
 			fmt.Println("load configure file fail: ", err)
 		}
 	}
+	cfg.Path = cfgPath
+	cfg.Load = cfg.DoLoad
+	cfg.Save = cfg.DoSave
+	cfg.InitId()
 
 	// init certificate
 	if cfg.Https.Enabled {
@@ -77,6 +83,40 @@ func init() {
 		if certFilePath == "" {
 			certFilePath = filepath.Join(rootFolder, "crt", "server.pfx")
 			cfg.Https.Cert.Server.File = certFilePath
+		}
+	}
+	if cfg.Cloud.Enabled {
+		certFilePath := cfg.Cloud.Cert.Server.File
+		if certFilePath == "" {
+			certFilePath = filepath.Join(rootFolder, "crt", "dev.pfx")
+			cfg.Cloud.Cert.Server.File = certFilePath
+		}
+
+		certFilePath = cfg.Cloud.Cert.Ca.File
+		if certFilePath == "" {
+			certFilePath = filepath.Join(rootFolder, "crt", "ca.crt")
+			cfg.Cloud.Cert.Ca.File = certFilePath
+		}
+
+		if cfg.Cloud.Port < 1 {
+			cfg.Cloud.Port = 6931
+		}
+	}
+	if cfg.Node.Enabled {
+		certFilePath := cfg.Node.Cert.Server.File
+		if certFilePath == "" {
+			certFilePath = filepath.Join(rootFolder, "crt", "dev.pfx")
+			cfg.Node.Cert.Server.File = certFilePath
+		}
+
+		certFilePath = cfg.Node.Cert.Ca.File
+		if certFilePath == "" {
+			certFilePath = filepath.Join(rootFolder, "crt", "ca.crt")
+			cfg.Node.Cert.Ca.File = certFilePath
+		}
+
+		if cfg.Node.CloudServer.Port < 1 {
+			cfg.Node.CloudServer.Port = 6931
 		}
 	}
 

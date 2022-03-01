@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"encoding/json"
@@ -22,14 +22,49 @@ func NewConfig() *Config {
 				Folder: "",
 				Level:  "error|warning|info",
 			},
+			Node: gcfg.Node{
+				Enabled: false,
+				CloudServer: gcfg.Cloud{
+					Address: "",
+					Port:    6931,
+				},
+				Cert: gcfg.Crt{
+					Ca: gcfg.CrtCa{
+						File: "",
+					},
+					Server: gcfg.CrtPfx{
+						File:     "",
+						Password: "",
+					},
+				},
+				Forward: gcfg.NodeFwd{
+					Enable: false,
+					Items:  []*gcfg.Fwd{},
+				},
+			},
 			Http: gcfg.Http{
 				Enabled:     true,
-				Port:        8085,
+				Port:        8080,
 				BehindProxy: false,
 			},
 			Https: gcfg.Https{
 				Enabled:     false,
 				Port:        8443,
+				BehindProxy: false,
+				Cert: gcfg.Crt{
+					Ca: gcfg.CrtCa{
+						File: "",
+					},
+					Server: gcfg.CrtPfx{
+						File:     "",
+						Password: "",
+					},
+				},
+				RequestClientCert: false,
+			},
+			Cloud: gcfg.Https{
+				Enabled:     false,
+				Port:        6931,
 				BehindProxy: false,
 				Cert: gcfg.Crt{
 					Ca: gcfg.CrtCa{
@@ -55,6 +90,7 @@ func NewConfig() *Config {
 					},
 				},
 			},
+			Proxy: "",
 		},
 	}
 }
@@ -95,6 +131,31 @@ func (s *Config) SaveToFile(filePath string) error {
 	_, err = fmt.Fprint(file, string(bytes[:]))
 
 	return err
+}
+
+func (s *Config) DoLoad() (*gcfg.Config, error) {
+	c := &Config{}
+	e := c.LoadFromFile(s.Path)
+	if e != nil {
+		return nil, e
+	}
+
+	return &c.Config, nil
+}
+
+func (s *Config) DoSave(cfg *gcfg.Config) error {
+	if cfg == nil {
+		return nil
+	}
+
+	c := &Config{}
+	e := c.LoadFromFile(s.Path)
+	if e != nil {
+		return e
+	}
+
+	c.Config = *cfg
+	return c.SaveToFile(s.Path)
 }
 
 func (s *Config) String() string {

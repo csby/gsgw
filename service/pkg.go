@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	srcPath = "src/github.com/csby/gwsf-example"
+	srcPath = "src/github.com/csby/gsgw"
 )
 
 var (
@@ -58,7 +58,7 @@ func (s *Pkg) Run() {
 	fmt.Println("vue folder path: ", vueFolder)
 	docFolder := filepath.Join(vueFolder, "gwsf-doc")
 	fmt.Println("doc folder path: ", docFolder)
-	optFolder := filepath.Join(vueFolder, "gwsf-opt")
+	optFolder := filepath.Join(vueFolder, "gsgw-opt")
 	fmt.Println("opt folder path: ", optFolder)
 
 	c := &gpkg.Config{
@@ -76,7 +76,7 @@ func (s *Pkg) Run() {
 					},
 				},
 				Src: gpkg.Source{
-					Enable: true,
+					Enable: false,
 					Root:   srcFolder,
 					Ignore: goIgnore,
 				},
@@ -90,7 +90,7 @@ func (s *Pkg) Run() {
 						},
 					},
 					{
-						Enable: false,
+						Enable: true,
 						Name:   "opt",
 						Src: gpkg.Source{
 							Root:   optFolder,
