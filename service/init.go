@@ -16,7 +16,7 @@ const (
 	moduleType    = "server"
 	moduleName    = "gsgw"
 	moduleRemark  = "安全网关"
-	moduleVersion = "1.0.1.0"
+	moduleVersion = "1.0.2.0"
 )
 
 var (
