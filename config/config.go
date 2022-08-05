@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/csby/gwsf/gcfg"
+	"github.com/csby/gwsf/gtype"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -82,15 +83,48 @@ func NewConfig() *Config {
 					Enabled: true,
 				},
 				Opt: gcfg.SiteOpt{
-					Users: []gcfg.SiteOptUser{
+					Users: []*gcfg.SiteOptUser{
 						{
-							"Admin",
-							"1",
+							Account:  "admin",
+							Password: "admin",
+							Name:     "管理员",
 						},
 					},
 				},
 			},
 			Proxy: "",
+			ReverseProxy: gcfg.Proxy{
+				Enabled: true,
+				Servers: []*gcfg.ProxyServer{
+					{
+						Id:      gtype.NewGuid(),
+						Name:    "http",
+						Disable: true,
+						TLS:     false,
+						IP:      "",
+						Port:    "80",
+						Targets: []*gcfg.ProxyTarget{},
+					},
+					{
+						Id:      gtype.NewGuid(),
+						Name:    "https",
+						Disable: true,
+						TLS:     true,
+						IP:      "",
+						Port:    "443",
+						Targets: []*gcfg.ProxyTarget{},
+					},
+				},
+			},
+			Sys: gcfg.System{
+				Svc: gcfg.Service{
+					Enabled: true,
+					Tomcats: []*gcfg.ServiceTomcat{},
+					Others:  []*gcfg.ServiceOther{},
+					Nginxes: []*gcfg.ServiceNginx{},
+					Files:   []*gcfg.ServiceFile{},
+				},
+			},
 		},
 	}
 }

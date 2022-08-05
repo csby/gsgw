@@ -16,7 +16,7 @@ const (
 	moduleType    = "server"
 	moduleName    = "gsgw"
 	moduleRemark  = "安全网关"
-	moduleVersion = "1.0.2.0"
+	moduleVersion = "1.0.3.0"
 )
 
 var (
@@ -129,6 +129,14 @@ func init() {
 	}
 	if cfg.Site.Opt.Path == "" {
 		cfg.Site.Opt.Path = filepath.Join(rootFolder, "site", "opt")
+	}
+
+	// init path of system service
+	if cfg.Sys.Svc.Custom.App == "" {
+		cfg.Sys.Svc.Custom.App = filepath.Join(rootFolder, "svc", "custom")
+	}
+	if cfg.Sys.Svc.Custom.Log == "" {
+		cfg.Sys.Svc.Custom.Log = filepath.Join(rootFolder, "log", "svc", "custom")
 	}
 
 	// init service
