@@ -80,7 +80,9 @@ func NewConfig() *Config {
 			},
 			Site: gcfg.Site{
 				Doc: gcfg.SiteDoc{
-					Enabled: true,
+					Enabled:       true,
+					DownloadTitle: "从github下载",
+					DownloadUrl:   "https://github.com/csby/gwsf-doc/releases",
 				},
 				Opt: gcfg.SiteOpt{
 					Users: []*gcfg.SiteOptUser{
@@ -90,11 +92,16 @@ func NewConfig() *Config {
 							Name:     "管理员",
 						},
 					},
+					Ldap: gcfg.SiteOptLdap{
+						Host: "127.0.0.1",
+						Port: 389,
+						Base: "dc=dev,dc=local",
+					},
 				},
 			},
 			Proxy: "",
 			ReverseProxy: gcfg.Proxy{
-				Enabled: true,
+				Enabled: false,
 				Servers: []*gcfg.ProxyServer{
 					{
 						Id:      gtype.NewGuid(),
@@ -118,7 +125,11 @@ func NewConfig() *Config {
 			},
 			Sys: gcfg.System{
 				Svc: gcfg.Service{
-					Enabled: true,
+					Enabled: false,
+					Custom: gcfg.ServiceCustom{
+						DownloadTitle: "从github下载",
+						DownloadUrl:   "https://github.com/csby/gtool/releases",
+					},
 					Tomcats: []*gcfg.ServiceTomcat{},
 					Others:  []*gcfg.ServiceOther{},
 					Nginxes: []*gcfg.ServiceNginx{},
