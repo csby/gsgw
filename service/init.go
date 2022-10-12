@@ -16,7 +16,7 @@ const (
 	moduleType    = "server"
 	moduleName    = "gsgw"
 	moduleRemark  = "安全网关"
-	moduleVersion = "1.0.3.0"
+	moduleVersion = "1.0.4.0"
 )
 
 var (
@@ -88,7 +88,7 @@ func init() {
 	if cfg.Cloud.Enabled {
 		certFilePath := cfg.Cloud.Cert.Server.File
 		if certFilePath == "" {
-			certFilePath = filepath.Join(rootFolder, "crt", "dev.pfx")
+			certFilePath = filepath.Join(rootFolder, "crt", "cloud.pfx")
 			cfg.Cloud.Cert.Server.File = certFilePath
 		}
 
@@ -105,7 +105,7 @@ func init() {
 	if cfg.Node.Enabled {
 		certFilePath := cfg.Node.Cert.Server.File
 		if certFilePath == "" {
-			certFilePath = filepath.Join(rootFolder, "crt", "dev.pfx")
+			certFilePath = filepath.Join(rootFolder, "crt", "node.pfx")
 			cfg.Node.Cert.Server.File = certFilePath
 		}
 
