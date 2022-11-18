@@ -46,15 +46,18 @@ func (s *Pkg) Run() {
 	appFileName := fmt.Sprintf("%s%s", appName, binExt)
 	fmt.Println("app file name: ", appFileName)
 
+	// shell
+	shellBinName := fmt.Sprintf("%s%s", "go_build_github_com_csby_gtool_gshell", binExt)
+	fmt.Println("shell bin name: ", shellBinName)
+	shellFileName := fmt.Sprintf("%s%s", "gshell", binExt)
+	fmt.Println("shell file name: ", shellFileName)
+
 	tmpFolder := filepath.Dir(binFolder)
 	srcFolder := filepath.Join(filepath.Dir(tmpFolder), srcPath)
 	fmt.Println("source folder path: ", srcFolder)
 
 	relFolder := filepath.Join(tmpFolder, "rel", moduleName)
 	fmt.Println("output folder path: ", relFolder)
-
-	shellFileName := fmt.Sprintf("gshell%s", binExt)
-	shellModuleName := fmt.Sprintf("go_build_github_com_csby_gtool_gshell%s", binExt)
 
 	// site
 	vueFolder := filepath.Join(filepath.Dir(filepath.Dir(tmpFolder)), "vue")
@@ -75,8 +78,8 @@ func (s *Pkg) Run() {
 				Bin: gpkg.Binary{
 					Root: binFolder,
 					Files: map[string]string{
-						binName:         appFileName,
-						shellModuleName: shellFileName,
+						binName:      appFileName,
+						shellBinName: shellFileName,
 					},
 				},
 				Src: gpkg.Source{
